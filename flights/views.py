@@ -4,7 +4,7 @@ from flights.models import Flight, Booking
 from .serializers import FlightListSerializer, BookingListSerializer, BookingDetailSerializer, BookingCreateSerializer
 from rest_framework.generics import ListAPIView, CreateAPIView, DestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
-
+from .permissions import IsAuthor, Iscanceled
 
 class FlightView(ListAPIView):
     queryset = Flight.objects.all()
@@ -21,6 +21,7 @@ class BookingDetailView(RetrieveAPIView):
     serializer_class = BookingDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'booking_id'
+    permission_classes = [IsAuthenticated, IsAuthor]
 
 class BookingCreateView(CreateAPIView):
     serializer_class = BookingCreateSerializer
@@ -34,6 +35,7 @@ class BookingUpdateView(UpdateAPIView):
     serializer_class = BookingCreateSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'booking_id'
+    permission_classes = [IsAuthenticated, IsAuthor, Iscanceled]
 
 
 class BookingDeleteView(DestroyAPIView):
@@ -41,5 +43,5 @@ class BookingDeleteView(DestroyAPIView):
     serializer_class = BookingListSerializer 
     lookup_field = 'id'
     lookup_url_kwarg = 'booking_id'
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated, IsAuthor, Iscanceled]
     
